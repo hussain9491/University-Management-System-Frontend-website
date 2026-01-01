@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal - Fusion Five</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 500px;
+            margin: 100px auto;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .dashboard {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            color: #4facfe;
+            font-size: 32px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .user-details {
+            color: #666;
+        }
+
+        .user-details p {
+            margin: 5px 0;
+        }
+
+        .logout-btn, .back-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover, .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #4facfe;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            color: #4facfe;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .menu-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 5px solid #4facfe;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            border-left-color: #00f2fe;
+        }
+
+        .menu-card-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .menu-card h3 {
+            color: #4facfe;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .menu-card p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #4facfe;
+        }
+
+        .form-header h2 {
+            color: #4facfe;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .close-btn {
+            background: #f0f0f0;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+
+        .close-btn:hover {
+            background: #e0e0e0;
+            transform: rotate(90deg);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4facfe;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 172, 254, 0.4);
+        }
+
+        .student-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 5px solid #4facfe;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .student-card:hover {
+            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+            transform: translateX(5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .student-card h4 {
+            color: #4facfe;
+            margin-bottom: 15px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .student-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
+        }
+
+        .student-card p {
+            color: #495057;
+            margin: 8px 0;
+            font-size: 15px;
+        }
+
+        .student-card p strong {
+            color: #212529;
+            min-width: 140px;
+            display: inline-block;
+        }
+
+        .action-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+            padding-top: 15px;
+            border-top: 2px solid #dee2e6;
+        }
+
+        .edit-btn, .delete-btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .edit-btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            box-shadow: 0 3px 10px rgba(79, 172, 254, 0.3);
+        }
+
+        .edit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .delete-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            box-shadow: 0 3px 10px rgba(245, 87, 108, 0.3);
+        }
+
+        .delete-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .class-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .search-bar {
+            margin-bottom: 25px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #4facfe;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .login-form h2 {
+            color: #4facfe;
+            text-align: center;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .error-message {
+            color: #f5576c;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+        }
+
+        .empty-state-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            color: #495057;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .user-info {
+                flex-direction: column;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .student-info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .home-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            box-shadow: 0 5px 20px rgba(79, 172, 254, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .home-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Back to Home Button -->
+    <button class="home-btn" onclick="window.location.href='index.html'">
+        🏠 Back to Home
+    </button>
+
+    <!-- Login Container -->
+    <div class="login-container">
+        <div class="login-form">
+            <h2>🎓 Student Portal Login</h2>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="username">Student Name</label>
+                    <input type="text" id="username" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Roll Number</label>
+                    <input type="text" id="password" placeholder="Enter your roll number" required>
+                </div>
+                <button type="submit" class="submit-btn">Login to Portal</button>
+                <p class="error-message">Invalid credentials. Please try again.</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard Container -->
+    <div class="container dashboard">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎓 Student Portal Dashboard</h1>
+            <p>Manage student records and information</p>
+            <div class="user-info">
+                <div class="user-details">
+                    <p><strong>Welcome, Student!</strong></p>
+                    <p>Access granted to Student Management System</p>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="back-btn">← Back to Main Menu</button>
+                    <button class="logout-btn" onclick="handleLogout()">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">425</div>
+                <div class="stat-label">Total Students</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">12</div>
+                <div class="stat-label">Classes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">98%</div>
+                <div class="stat-label">Attendance Rate</div>
+            </div>
+        </div>
+
+        <!-- Menu Grid -->
+        <div class="menu-grid">
+            <div class="menu-card">
+                <div class="menu-card-icon">➕</div>
+                <h3>Add Student</h3>
+                <p>Register a new student with complete personal and academic details</p>
+            </div>
+
+            <div class="menu-card">
+                <div class="menu-card-icon">👥</div>
+                <h3>View All Students</h3>
+                <p>Browse complete list of all registered students in the system</p>
+            </div>
+
+            <div class="menu-card">
+                <div class="menu-card-icon">🔍</div>
+                <h3>Search Student</h3>
+                <p>Find a specific student by entering their roll number</p>
+            </div>
+
+            <div class="menu-card">
+                <div class="menu-card-icon">✏️</div>
+                <h3>Update Student Data</h3>
+                <p>Modify existing student information and keep records current</p>
+            </div>
+
+            <div class="menu-card">
+                <div class="menu-card-icon">🗑️</div>
+                <h3>Delete Student</h3>
+                <p>Remove a student record from the management system</p>
+            </div>
+        </div>
+
+        <!-- Add Student Form -->
+        <div class="form-container">
+            <div class="form-header">
+                <h2>➕ Add New Student</h2>
+                <button class="close-btn">✕</button>
+            </div>
+            <form>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Student Name *</label>
+                        <input type="text" placeholder="Enter student's full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Father's Name *</label>
+                        <input type="text" placeholder="Enter father's full name" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Father's Contact *</label>
+                        <input type="tel" placeholder="Enter contact number" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Age *</label>
+                        <input type="number" placeholder="Enter student age" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Roll Number *</label>
+                        <input type="text" placeholder="Enter unique roll number" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Class *</label>
+                        <select required>
+                            <option value="">Select class</option>
+                            <option value="1">Class 1</option>
+                            <option value="2">Class 2</option>
+                            <option value="3">Class 3</option>
+                            <option value="4">Class 4</option>
+                            <option value="5">Class 5</option>
+                            <option value="6">Class 6</option>
+                            <option value="7">Class 7</option>
+                            <option value="8">Class 8</option>
+                            <option value="9">Class 9</option>
+                            <option value="10">Class 10</option>
+                            <option value="11">Class 11</option>
+                            <option value="12">Class 12</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Address *</label>
+                    <textarea placeholder="Enter complete residential address" required></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Add Student</button>
+            </form>
+        </div>
+
+        <!-- View All Students Section -->
+        <div class="form-container">
+            <div class="form-header">
+                <h2>👥 All Students</h2>
+                <button class="close-btn">✕</button>
+            </div>
+            
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="🔍 Search by name, roll number, or class...">
+            </div>
+
+            <!-- Sample Student Cards -->
+            <div class="student-card">
+                <h4>🎓 Student 1</h4>
+                <div class="student-info-grid">
+                    <p><strong>Name:</strong> Ahmed Ali Khan</p>
+                    <p><strong>Father Name:</strong> Ali Hassan Khan</p>
+                    <p><strong>Father Contact:</strong> +92-300-1234567</p>
+                    <p><strong>Age:</strong> 16 years</p>
+                    <p><strong>Roll No:</strong> STD-2024-001</p>
+                    <p><strong>Class:</strong> <span class="class-badge">Class 10-A</span></p>
+                </div>
+                <p style="margin-top: 10px;"><strong>Address:</strong> House #123, Street 5, Gulshan-e-Iqbal, Karachi</p>
+                <div class="action-buttons">
+                    <button class="edit-btn">✏️ Edit Details</button>
+                    <button class="delete-btn">🗑️ Delete</button>
+                </div>
+            </div>
+
+            <div class="student-card">
+                <h4>🎓 Student 2</h4>
+                <div class="student-info-grid">
+                    <p><strong>Name:</strong> Fatima Zahra</p>
+                    <p><strong>Father Name:</strong> Muhammad Saleem</p>
+                    <p><strong>Father Contact:</strong> +92-321-9876543</p>
+                    <p><strong>Age:</strong> 15 years</p>
+                    <p><strong>Roll No:</strong> STD-2024-002</p>
+                    <p><strong>Class:</strong> <span class="class-badge">Class 9-B</span></p>
+                </div>
+                <p style="margin-top: 10px;"><strong>Address:</strong> Flat 45, Block C, Clifton, Karachi</p>
+                <div class="action-buttons">
+                    <button class="edit-btn">✏️ Edit Details</button>
+                    <button class="delete-btn">🗑️ Delete</button>
+                </div>
+            </div>
+
+            <div class="student-card">
+                <h4>🎓 Student 3</h4>
+                <div class="student-info-grid">
+                    <p><strong>Name:</strong> Bilal Ahmed</p>
+                    <p><strong>Father Name:</strong> Ahmed Raza</p>
+                    <p><strong>Father Contact:</strong> +92-333-4567890</p>
+                    <p><strong>Age:</strong> 17 years</p>
+                    <p><strong>Roll No:</strong> STD-2024-003</p>
+                    <p><strong>Class:</strong> <span class="class-badge">Class 11-A</span></p>
+                </div>
+                <p style="margin-top: 10px;"><strong>Address:</strong> House 67, Defence Phase 5, Karachi</p>
+                <div class="action-buttons">
+                    <button class="edit-btn">✏️ Edit Details</button>
+                    <button class="delete-btn">🗑️ Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Student Form -->
+        <div class="form-container">
+            <div class="form-header">
+                <h2>🔍 Search Student</h2>
+                <button class="close-btn">✕</button>
+            </div>
+            <form>
+                <div class="form-group">
+                    <label>Roll Number</label>
+                    <input type="text" placeholder="Enter roll number to search (e.g., STD-2024-001)" required>
+                </div>
+                <button type="submit" class="submit-btn">Search Student</button>
+            </form>
+
+            <!-- Search Result -->
+            <div class="student-card" style="margin-top: 30px;">
+                <h4>✅ Student Found</h4>
+                <div class="student-info-grid">
+                    <p><strong>Name:</strong> Ayesha Siddiqui</p>
+                    <p><strong>Father Name:</strong> Rashid Siddiqui</p>
+                    <p><strong>Father Contact:</strong> +92-345-7891234</p>
+                    <p><strong>Age:</strong> 14 years</p>
+                    <p><strong>Roll No:</strong> STD-2024-004</p>
+                    <p><strong>Class:</strong> <span class="class-badge">Class 8-C</span></p>
+                </div>
+                <p style="margin-top: 10px;"><strong>Address:</strong> Apartment 12, North Nazimabad, Karachi</p>
+            </div>
+        </div>
+
+        <!-- Update Student Form -->
+        <div class="form-container">
+            <div class="form-header">
+                <h2>✏️ Update Student Data</h2>
+                <button class="close-btn">✕</button>
+            </div>
+            <form>
+                <div class="form-group">
+                    <label>Roll Number to Update</label>
+                    <input type="text" placeholder="Enter roll number" required>
+                </div>
+                <button type="button" class="submit-btn">Load Student Data</button>
+            </form>
+
+            <form style="margin-top: 30px;">
+                <p style="color: #666; margin-bottom: 20px; font-style: italic;">📝 Leave fields blank to keep current data</p>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Student Name</label>
+                        <input type="text" placeholder="Current: Zainab Hassan">
+                    </div>
+                    <div class="form-group">
+                        <label>Father's Name</label>
+                        <input type="text" placeholder="Current: Hassan Malik">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Father's Contact</label>
+                        <input type="tel" placeholder="Current: +92-300-5551234">
+                    </div>
+                    <div class="form-group">
+                        <label>Age</label>
+                        <input type="number" placeholder="Current: 15">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Roll Number</label>
+                        <input type="text" placeholder="Current: STD-2024-005">
+                    </div>
+                    <div class="form-group">
+                        <label>Class</label>
+                        <select>
+                            <option value="">Current: Class 9</option>
+                            <option value="1">Class 1</option>
+                            <option value="2">Class 2</option>
+                            <option value="3">Class 3</option>
+                            <option value="4">Class 4</option>
+                            <option value="5">Class 5</option>
+                            <option value="6">Class 6</option>
+                            <option value="7">Class 7</option>
+                            <option value="8">Class 8</option>
+                            <option value="9">Class 9</option>
+                            <option value="10">Class 10</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Address</label>
+                    <textarea placeholder="Current: House 89, Bahadurabad, Karachi"></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Update Student Data</button>
+            </form>
+        </div>
+
+        <!-- Delete Student Form -->
+        <div class="form-container">
+            <div class="form-header">
+                <h2>🗑️ Delete Student</h2>
+                <button class="close-btn">✕</button>
+            </div>
+            <form>
+                <div class="form-group">
+                    <label>Roll Number</label>
+                    <input type="text" placeholder="Enter roll number to delete" required>
+                </div>
+                <button type="submit" class="submit-btn" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">Delete Student</button>
+            </form>
+
+            <!-- Confirmation Preview -->
+            <div class="student-card" style="margin-top: 30px; border-left-color: #f5576c;">
+                <h4 style="color: #f5576c;">⚠️ Student to be Deleted</h4>
+                <div class="student-info-grid">
+                    <p><strong>Name:</strong> Haneen</p>
+                    <p><strong>Father Name:</strong> HUSSAIN & Sami</p>
+                    <p><strong>Father Contact:</strong> +92-312-6789012</p>
+                    <p><strong>Age:</strong> 18 years</p>
+                    <p><strong>Roll No:</strong> CS-B-122-</p>
+                    <p><strong>Class:</strong> <span class="class-badge" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">Class 7-A</span></p>
+                </div>
+                <p style="margin-top: 10px;"><strong>Address:</strong> mir khan colony gali no 3, hyderabad</p>
+                <p style="color: #f5576c; margin-top: 15px; font-weight: 600;">⚠️ Are you sure you want to delete this student?</p>
+            </div>
+        </div>
+
+        <!-- Empty State Example -->
+        <div class="form-container">
+            <div class="form-header">
+                <h2>👥 Student Records</h2>
+                <button class="close-btn">✕</button>
+            </div>
+            <div class="empty-state">
+                <div class="empty-state-icon">📋</div>
+                <h3>No Students Found</h3>
+                <p>The student database is empty. Start by adding new students!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample student data (simulating backend)
+        let students = [
+            {
+                Name: "Ahmed Ali Khan",
+                FatherName: "Ali Hassan Khan",
+                FatherContact: "+92-300-1234567",
+                Age: 16,
+                RollNo: "STD-2024-001",
+                Class: "Class 10-A",
+                Address: "House #123, Street 5, Gulshan-e-Iqbal, Karachi"
+            },
+            {
+                Name: "Fatima Zahra",
+                FatherName: "Muhammad Saleem",
+                FatherContact: "+92-321-9876543",
+                Age: 15,
+                RollNo: "STD-2024-002",
+                Class: "Class 9-B",
+                Address: "Flat 45, Block C, Clifton, Karachi"
+            },
+            {
+                Name: "Bilal Ahmed",
+                FatherName: "Ahmed Raza",
+                FatherContact: "+92-333-4567890",
+                Age: 17,
+                RollNo: "STD-2024-003",
+                Class: "Class 11-A",
+                Address: "House 67, Defence Phase 5, Karachi"
+            }
+        ];
+
+        let currentStudent = null;
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const student = students.find(s => s.Name === username && s.RollNo === password);
+
+            if (student) {
+                currentStudent = student;
+                document.querySelector('.login-container').style.display = 'none';
+                document.querySelector('.dashboard').style.display = 'block';
+            } else {
+                document.querySelector('.error-message').style.display = 'block';
+            }
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                currentStudent = null;
+                document.querySelector('.dashboard').style.display = 'none';
+                document.querySelector('.login-container').style.display = 'block';
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+                document.querySelector('.error-message').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

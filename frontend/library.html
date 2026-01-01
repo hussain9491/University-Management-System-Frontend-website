@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management - Fusion Five</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header h1 {
+            color: #11998e;
+            font-size: 32px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .menu-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 5px solid #11998e;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            border-left-color: #38ef7d;
+        }
+
+        .menu-card-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .menu-card h3 {
+            color: #11998e;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .menu-card p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #11998e;
+        }
+
+        .form-header h2 {
+            color: #11998e;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .close-btn {
+            background: #f0f0f0;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+
+        .close-btn:hover {
+            background: #e0e0e0;
+            transform: rotate(90deg);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #11998e;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(17, 153, 142, 0.1);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(17, 153, 142, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(17, 153, 142, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .book-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 5px solid #11998e;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .book-card:hover {
+            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+            transform: translateX(5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .book-card h4 {
+            color: #11998e;
+            margin-bottom: 15px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .book-card p {
+            color: #495057;
+            margin: 8px 0;
+            font-size: 15px;
+        }
+
+        .book-card p strong {
+            color: #212529;
+            min-width: 120px;
+            display: inline-block;
+        }
+
+        .action-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+            padding-top: 15px;
+            border-top: 2px solid #dee2e6;
+        }
+
+        .edit-btn, .delete-btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .edit-btn {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            box-shadow: 0 3px 10px rgba(17, 153, 142, 0.3);
+        }
+
+        .edit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(17, 153, 142, 0.4);
+        }
+
+        .delete-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            box-shadow: 0 3px 10px rgba(245, 87, 108, 0.3);
+        }
+
+        .delete-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .genre-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+        }
+
+        .empty-state-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            color: #495057;
+            margin-bottom: 10px;
+        }
+
+        .search-bar {
+            margin-bottom: 25px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #11998e;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(17, 153, 142, 0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #11998e;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            color: #11998e;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .form-container {
+                padding: 25px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+
+        .home-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            box-shadow: 0 5px 20px rgba(17, 153, 142, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .home-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(17, 153, 142, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Back to Home Button -->
+    <button class="home-btn" onclick="window.location.href='index.html'">
+        🏠 Back to Home
+    </button>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📚 Library Management System</h1>
+            <p>Manage your university's book collection efficiently</p>
+            <button class="back-btn">← Back to Main Menu</button>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">248</div>
+                <div class="stat-label">Total Books</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">15</div>
+                <div class="stat-label">Genres</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">42</div>
+                <div class="stat-label">Authors</div>
+            </div>
+        </div>
+
+        <!-- Menu Grid -->
+        <div class="menu-grid">
+            <div class="menu-card">
+                <div class="menu-card-icon">📖</div>
+                <h3>Add New Book</h3>
+                <p>Register a new book in the library database with complete details</p>
+            </div>
+
+            <div class="menu-card">
+                <div class="menu-card-icon">📚</div>
+                <h3>View All Books</h3>
+                <p>Browse through the complete collection of books in the library</p>
+            </div>
+
+            <div class="menu-card">
+                <div class="menu-card-icon">🔍</div>
+                <h3>Search Book</h3>
+                <p>Find a specific book by entering its unique Book ID</p>
+            </div>
+
+            <div class="menu-card">
+                <div class="menu-card-icon">✏️</div>
+                <h3>Update Book Data</h3>
+                <p>Modify existing book information and keep records up to date</p>
+            </div>
+
+            <div class="menu-card">
+                <div class="menu-card-icon">🗑️</div>
+                <h3>Delete Book</h3>
+                <p>Remove a book record from the library management system</p>
+            </div>
+        </div>
+
+        <!-- Add Book Form -->
+        <div class="form-container">
+            <div class="form-header">
+                <h2>📖 Add New Book</h2>
+                <button class="close-btn">✕</button>
+            </div>
+            <form>
+                <div class="form-group">
+                    <label>Book Title</label>
+                    <input type="text" placeholder="Enter the book title" required>
+                </div>
+                <div class="form-group">
+                    <label>Author Name</label>
+                    <input type="text" placeholder="Enter author's full name" required>
+                </div>
+                <div class="form-group">
+                    <label>Book ID</label>
+                    <input type="text" placeholder="Enter unique book identifier (e.g., BK001)" required>
+                </div>
+                <div class="form-group">
+                    <label>Genre</label>
+                    <select required aria-label="Select book genre">
+                        <option value="">Select a genre</option>
+                        <option value="Fiction">Fiction</option>
+                        <option value="Non-Fiction">Non-Fiction</option>
+                        <option value="Science">Science</option>
+                        <option value="History">History</option>
+                        <option value="Biography">Biography</option>
+                        <option value="Mystery">Mystery</option>
+                        <option value="Romance">Romance</option>
+                        <option value="Fantasy">Fantasy</option>
+                        <option value="Horror">Horror</option>
+                        <option value="Self-Help">Self-Help</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn">Add Book to Library</button>
+            </form>
+        </div>
+
+        <!-- View All Books Section -->
+        <div class="form-container">
+            <div class="form-header">
+                <h2>📚 All Books</h2>
+                <button class="close-btn">✕</button>
+            </div>
+            
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="🔍 Search books by title, author, or genre...">
+            </div>
+
+            <!-- Sample Book Cards -->
+            <div class="book-card">
+                <h4>📖 Book 1</h4>
+                <p><strong>Title:</strong> To Kill a Mockingbird</p>
+                <p><strong>Author:</strong> Harper Lee</p>
+                <p><strong>Book ID:</strong> BK001</p>
+                <p><strong>Genre:</strong> <span class="genre-badge">Fiction</span></p>
+                <div class="action-buttons">
+                    <button class="edit-btn">✏️ Edit</button>
+                    <button class="delete-btn">🗑️ Delete</button>
+                </div>
+            </div>
+
+            <div class="book-card">
+                <h4>📖 Book 2</h4>
+                <p><strong>Title:</strong> 1984</p>
+                <p><strong>Author:</strong> George Orwell</p>
+                <p><strong>Book ID:</strong> BK002</p>
+                <p><strong>Genre:</strong> <span class="genre-badge">Science Fiction</span></p>
+                <div class="action-buttons">
+                    <button class="edit-btn">✏️ Edit</button>
+                    <button class="delete-btn">🗑️ Delete</button>
+                </div>
+            </div>
+
+            <div class="book-card">
+                <h4>📖 Book 3</h4>
+                <p><strong>Title:</strong> Pride and Prejudice</p>
+                <p><strong>Author:</strong> Jane Austen</p>
+                <p><strong>Book ID:</strong> BK003</p>
+                <p><strong>Genre:</strong> <span class="genre-badge">Romance</span></p>
+                <div class="action-buttons">
+                    <button class="edit-btn">✏️ Edit</button>
+                    <button class="delete-btn">🗑️ Delete</button>
+                </div>
+            </div>
+
+            <div class="book-card">
+                <h4>📖 Book 4</h4>
+                <p><strong>Title:</strong> The Great Gatsby</p>
+                <p><strong>Author:</strong> F. Scott Fitzgerald</p>
+                <p><strong>Book ID:</strong> BK004</p>
+                <p><strong>Genre:</strong> <span class="genre-badge">Fiction</span></p>
+                <div class="action-buttons">
+                    <button class="edit-btn">✏️ Edit</button>
+                    <button class="delete-btn">🗑️ Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Book Form -->
+        <div class="form-container">
+            <div class="form-header">
+                <h2>🔍 Search Book</h2>
+                <button class="close-btn">✕</button>
+            </div>
+            <form>
+                <div class="form-group">
+                    <label>Book ID</label>
+                    <input type="text" placeholder="Enter Book ID to search (e.g., BK001)" required>
+                </div>
+                <button type="submit" class="submit-btn">Search Book</button>
+            </form>
+
+            <!-- Search Result -->
+            <div class="book-card" style="margin-top: 30px;">
+                <h4>📖 Book Found</h4>
+                <p><strong>Title:</strong> Harry Potter and the Philosopher's Stone</p>
+                <p><strong>Author:</strong> J.K. Rowling</p>
+                <p><strong>Book ID:</strong> BK005</p>
+                <p><strong>Genre:</strong> <span class="genre-badge">Fantasy</span></p>
+            </div>
+        </div>
+
+        <!-- Update Book Form -->
+        <div class="form-container">
+            <div class="form-header">
+                <h2>✏️ Update Book Data</h2>
+                <button class="close-btn">✕</button>
+            </div>
+            <form>
+                <div class="form-group">
+                    <label>Book ID to Update</label>
+                    <input type="text" placeholder="Enter Book ID" required>
+                </div>
+                <button type="button" class="submit-btn">Load Book Data</button>
+            </form>
+
+            <form style="margin-top: 30px;">
+                <p style="color: #666; margin-bottom: 20px; font-style: italic;">📝 Leave fields blank to keep current data</p>
+                <div class="form-group">
+                    <label>Book Title</label>
+                    <input type="text" placeholder="Current: The Catcher in the Rye">
+                </div>
+                <div class="form-group">
+                    <label>Author Name</label>
+                    <input type="text" placeholder="Current: J.D. Salinger">
+                </div>
+                <div class="form-group">
+                    <label>Genre</label>
+                    <select>
+                        <option value="">Current: Fiction</option>
+                        <option value="Fiction">Fiction</option>
+                        <option value="Non-Fiction">Non-Fiction</option>
+                        <option value="Science">Science</option>
+                        <option value="History">History</option>
+                        <option value="Biography">Biography</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>New Book ID</label>
+                    <input type="text" placeholder="Current: BK006">
+                </div>
+                <button type="submit" class="submit-btn">Update Book Data</button>
+            </form>
+        </div>
+
+        <!-- Delete Book Form -->
+        <div class="form-container">
+            <div class="form-header">
+                <h2>🗑️ Delete Book</h2>
+                <button class="close-btn">✕</button>
+            </div>
+            <form>
+                <div class="form-group">
+                    <label>Book ID</label>
+                    <input type="text" placeholder="Enter Book ID to delete" required>
+                </div>
+                <button type="submit" class="submit-btn" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">Delete Book</button>
+            </form>
+
+            <!-- Confirmation Preview -->
+            <div class="book-card" style="margin-top: 30px; border-left-color: #f5576c;">
+                <h4 style="color: #f5576c;">⚠️ Book to be Deleted</h4>
+                <p><strong>Title:</strong> The Lord of the Rings</p>
+                <p><strong>Author:</strong> J.R.R. Tolkien</p>
+                <p><strong>Book ID:</strong> BK007</p>
+                <p><strong>Genre:</strong> <span class="genre-badge" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">Fantasy</span></p>
+                <p style="color: #f5576c; margin-top: 15px; font-weight: 600;">⚠️ Are you sure you want to delete this book?</p>
+            </div>
+        </div>
+
+        <!-- Empty State Example -->
+        <div class="form-container">
+            <div class="form-header">
+                <h2>📚 Book List</h2>
+                <button class="close-btn">✕</button>
+            </div>
+            <div class="empty-state">
+                <div class="empty-state-icon">📭</div>
+                <h3>No Books Found</h3>
+                <p>The library database is empty. Start by adding some books!</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

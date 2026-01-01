@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal - Fusion Five</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 500px;
+            margin: 100px auto;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .dashboard {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .user-details {
+            color: #666;
+        }
+
+        .user-details p {
+            margin: 5px 0;
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .menu-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .menu-card h3 {
+            color: #667eea;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .menu-card p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-container {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .form-container.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .form-header h2 {
+            color: #667eea;
+            font-size: 28px;
+        }
+
+        .close-btn {
+            background: #f0f0f0;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #e0e0e0;
+            transform: rotate(90deg);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .admin-list {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .admin-list.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .admin-card {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .admin-card:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .admin-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .admin-card p {
+            color: #666;
+            margin: 5px 0;
+        }
+
+        .action-buttons {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .edit-btn, .delete-btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .edit-btn {
+            background: #667eea;
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background: #5568d3;
+        }
+
+        .delete-btn {
+            background: #f5576c;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: #e04455;
+        }
+
+        .login-form h2 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .error-message {
+            color: #f5576c;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .user-info {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+
+        .home-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .home-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Back to Home Button -->
+    <button class="home-btn" onclick="window.location.href='index.html'">
+        🏠 Back to Home
+    </button>
+
+    <!-- Login Container -->
+    <div class="login-container" id="loginContainer">
+        <div class="login-form">
+            <h2>🔐 Admin Portal Login</h2>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="username">Admin Name</label>
+                    <input type="text" id="username" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Admin ID</label>
+                    <input type="text" id="password" placeholder="Enter your ID" required>
+                </div>
+                <button type="submit" class="submit-btn">Login</button>
+                <p class="error-message" id="loginError">Invalid credentials. Please try again.</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard Container -->
+    <div class="container dashboard" id="dashboard">
+        <!-- Header -->
+        <div class="header">
+            <h1>👤 Admin Portal Dashboard</h1>
+            <div class="user-info">
+                <div class="user-details" id="userDetails">
+                    <p><strong>Welcome, Admin!</strong></p>
+                </div>
+                <button class="logout-btn" onclick="handleLogout()">Logout</button>
+            </div>
+        </div>
+
+        <!-- Success Message -->
+        <div class="success-message" id="successMessage"></div>
+
+        <!-- Menu Grid -->
+        <div class="menu-grid">
+            <div class="menu-card" onclick="showForm('addAdmin')">
+                <h3>➕ Add Admin</h3>
+                <p>Register a new admin member to the system</p>
+            </div>
+
+            <div class="menu-card" onclick="showForm('viewAdmins')">
+                <h3>👥 View All Admins</h3>
+                <p>See the complete list of all admins</p>
+            </div>
+
+            <div class="menu-card" onclick="showForm('searchAdmin')">
+                <h3>🔍 Search Admin</h3>
+                <p>Find a specific admin by their ID</p>
+            </div>
+
+            <div class="menu-card" onclick="showForm('updateAdmin')">
+                <h3>✏️ Update Admin</h3>
+                <p>Modify existing admin information</p>
+            </div>
+
+            <div class="menu-card" onclick="showForm('deleteAdmin')">
+                <h3>🗑️ Delete Admin</h3>
+                <p>Remove an admin from the system</p>
+            </div>
+        </div>
+
+        <!-- Add Admin Form -->
+        <div class="form-container" id="addAdminForm">
+            <div class="form-header">
+                <h2>Add New Admin</h2>
+                <button class="close-btn" onclick="closeForm('addAdminForm')">✕</button>
+            </div>
+            <form onsubmit="handleAddAdmin(event)">
+                <div class="form-group">
+                    <label>Admin Name</label>
+                    <input type="text" name="name" placeholder="Enter admin name" required>
+                </div>
+                <div class="form-group">
+                    <label>Contact Number</label>
+                    <input type="tel" name="contact" placeholder="Enter contact number" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" placeholder="Enter email address" required>
+                </div>
+                <div class="form-group">
+                    <label>Role</label>
+                    <input type="text" name="role" placeholder="Enter role (e.g., Principal, Manager)" required>
+                </div>
+                <div class="form-group">
+                    <label>Admin ID</label>
+                    <input type="text" name="id" placeholder="Enter unique admin ID" required>
+                </div>
+                <button type="submit" class="submit-btn">Add Admin</button>
+            </form>
+        </div>
+
+        <!-- View All Admins -->
+        <div class="admin-list" id="viewAdminsSection">
+            <div class="form-header">
+                <h2>All Admins</h2>
+                <button class="close-btn" onclick="closeForm('viewAdminsSection')">✕</button>
+            </div>
+            <div id="adminsList"></div>
+        </div>
+
+        <!-- Search Admin Form -->
+        <div class="form-container" id="searchAdminForm">
+            <div class="form-header">
+                <h2>Search Admin</h2>
+                <button class="close-btn" onclick="closeForm('searchAdminForm')">✕</button>
+            </div>
+            <form onsubmit="handleSearchAdmin(event)">
+                <div class="form-group">
+                    <label>Admin ID</label>
+                    <input type="text" name="searchId" placeholder="Enter admin ID to search" required>
+                </div>
+                <button type="submit" class="submit-btn">Search</button>
+            </form>
+            <div id="searchResult"></div>
+        </div>
+
+        <!-- Update Admin Form -->
+        <div class="form-container" id="updateAdminForm">
+            <div class="form-header">
+                <h2>Update Admin Data</h2>
+                <button class="close-btn" onclick="closeForm('updateAdminForm')">✕</button>
+            </div>
+            <form onsubmit="handleUpdateAdmin(event)">
+                <div class="form-group">
+                    <label>Admin ID to Update</label>
+                    <input type="text" id="updateId" placeholder="Enter admin ID" required>
+                </div>
+                <button type="button" class="submit-btn" onclick="loadAdminData()">Load Admin Data</button>
+            </form>
+            <form id="updateDataForm" style="display: none; margin-top: 20px;" onsubmit="saveUpdatedAdmin(event)">
+                <p style="color: #666; margin-bottom: 20px;">Leave fields blank to keep current data</p>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" name="name" id="updateName" placeholder="Enter new name">
+                </div>
+                <div class="form-group">
+                    <label>Contact</label>
+                    <input type="tel" name="contact" id="updateContact" placeholder="Enter new contact">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" id="updateEmail" placeholder="Enter new email">
+                </div>
+                <div class="form-group">
+                    <label>Role</label>
+                    <input type="text" name="role" id="updateRole" placeholder="Enter new role">
+                </div>
+                <div class="form-group">
+                    <label>New ID</label>
+                    <input type="text" name="id" id="updateNewId" placeholder="Enter new ID">
+                </div>
+                <button type="submit" class="submit-btn">Update Admin</button>
+            </form>
+        </div>
+
+        <!-- Delete Admin Form -->
+        <div class="form-container" id="deleteAdminForm">
+            <div class="form-header">
+                <h2>Delete Admin</h2>
+                <button class="close-btn" onclick="closeForm('deleteAdminForm')">✕</button>
+            </div>
+            <form onsubmit="handleDeleteAdmin(event)">
+                <div class="form-group">
+                    <label>Admin ID</label>
+                    <input type="text" name="deleteId" placeholder="Enter admin ID to delete" required>
+                </div>
+                <button type="submit" class="submit-btn">Delete Admin</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Sample admin data (simulating backend)
+        let admins = [
+            {
+                Name: "Hussain Ali",
+                Contact: "123-456-7890",
+                Email: "hussain@university.com",
+                Role: "Principal",
+                Id: "admin12"
+            },
+            {
+                Name: "Haneen mulla",
+                Contact: "098-765-4321",
+                Email: "haneen@university.com",
+                Role: "Vice Principal",
+                Id: "admin12"
+            },
+            
+            {
+                Name: "Sami kk",
+                Contact: "098-876-4321",
+                Email: "sami@university.com",
+                Role: "Head Teacher",
+                Id: "admin12"
+            },
+            {
+                Name: "Abeer shaikh",
+                Contact: "098-567-4321",
+                Email: "sami@university.com",
+                Role: "CS Teacher",
+                Id: "admin12"
+            }
+        ];
+
+        let currentAdmin = null;
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const admin = admins.find(a => a.Name === username && a.Id === password);
+
+            if (admin) {
+                currentAdmin = admin;
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                displayUserInfo();
+            } else {
+                document.getElementById('loginError').classList.add('show');
+            }
+        }
+
+        function displayUserInfo() {
+            const userDetails = `
+                <p><strong>Name:</strong> ${currentAdmin.Name}</p>
+                <p><strong>Contact:</strong> ${currentAdmin.Contact}</p>
+                <p><strong>Email:</strong> ${currentAdmin.Email}</p>
+                <p><strong>Role:</strong> ${currentAdmin.Role}</p>
+                <p><strong>ID:</strong> ${currentAdmin.Id}</p>
+            `;
+            document.getElementById('userDetails').innerHTML = userDetails;
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                currentAdmin = null;
+                document.getElementById('dashboard').style.display = 'none';
+                document.getElementById('loginContainer').style.display = 'block';
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+                document.getElementById('loginError').classList.remove('show');
+            }
+        }
+
+        function showForm(formType) {
+            closeAllForms();
+            
+            switch(formType) {
+                case 'addAdmin':
+                    document.getElementById('addAdminForm').classList.add('active');
+                    break;
+                case 'viewAdmins':
+                    document.getElementById('viewAdminsSection').classList.add('active');
+                    displayAllAdmins();
+                    break;
+                case 'searchAdmin':
+                    document.getElementById('searchAdminForm').classList.add('active');
+                    break;
+                case 'updateAdmin':
+                    document.getElementById('updateAdminForm').classList.add('active');
+                    break;
+                case 'deleteAdmin':
+                    document.getElementById('deleteAdminForm').classList.add('active');
+                    break;
+            }
+        }
+
+        function closeForm(formId) {
+            document.getElementById(formId).classList.remove('active');
+        }
+
+        function closeAllForms() {
+            document.querySelectorAll('.form-container, .admin-list').forEach(form => {
+                form.classList.remove('active');
+            });
+        }
+
+        function showSuccess(message) {
+            const successMsg = document.getElementById('successMessage');
+            successMsg.textContent = message;
+            successMsg.classList.add('show');
+            setTimeout(() => {
+                successMsg.classList.remove('show');
+            }, 3000);
+        }
+
+        function handleAddAdmin(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const newAdmin = {
+                Name: formData.get('name'),
+                Contact: formData.get('contact'),
+                Email: formData.get('email'),
+                Role: formData.get('role'),
+                Id: formData.get('id')
+            };
+
+            admins.push(newAdmin);
+            showSuccess('Admin added successfully!');
+            event.target.reset();
+            closeForm('addAdminForm');
+        }
+
+        function displayAllAdmins() {
+            const adminsList = document.getElementById('adminsList');
+            
+            if (admins.length === 0) {
+                adminsList.innerHTML = '<p style="text-align: center; color: #666;">No admins found.</p>';
+                return;
+            }
+
+            adminsList.innerHTML = admins.map((admin, index) => `
+                <div class="admin-card">
+                    <h4>Admin ${index + 1}</h4>
+                    <p><strong>Name:</strong> ${admin.Name}</p>
+                    <p><strong>Contact:</strong> ${admin.Contact}</p>
+                    <p><strong>Email:</strong> ${admin.Email}</p>
+                    <p><strong>Role:</strong> ${admin.Role}</p>
+                    <p><strong>ID:</strong> ${admin.Id}</p>
+                </div>
+            `).join('');
+        }
+
+        function handleSearchAdmin(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const searchId = formData.get('searchId');
+            
+            const admin = admins.find(a => a.Id === searchId);
+            const searchResult = document.getElementById('searchResult');
+
+            if (admin) {
+                searchResult.innerHTML = `
+                    <div class="admin-card" style="margin-top: 20px;">
+                        <h4>Admin Found</h4>
+                        <p><strong>Name:</strong> ${admin.Name}</p>
+                        <p><strong>Contact:</strong> ${admin.Contact}</p>
+                        <p><strong>Email:</strong> ${admin.Email}</p>
+                        <p><strong>Role:</strong> ${admin.Role}</p>
+                        <p><strong>ID:</strong> ${admin.Id}</p>
+                    </div>
+                `;
+            } else {
+                searchResult.innerHTML = '<p style="color: #f5576c; margin-top: 20px;">No admin found with this ID.</p>';
+            }
+        }
+
+        function loadAdminData() {
+            const updateId = document.getElementById('updateId').value;
+            const admin = admins.find(a => a.Id === updateId);
+
+            if (admin) {
+                document.getElementById('updateDataForm').style.display = 'block';
+                document.getElementById('updateName').placeholder = `Current: ${admin.Name}`;
+                document.getElementById('updateContact').placeholder = `Current: ${admin.Contact}`;
+                document.getElementById('updateEmail').placeholder = `Current: ${admin.Email}`;
+                document.getElementById('updateRole').placeholder = `Current: ${admin.Role}`;
+                document.getElementById('updateNewId').placeholder = `Current: ${admin.Id}`;
+            } else {
+                alert('Admin not found!');
+            }
+        }
+
+        function saveUpdatedAdmin(event) {
+            event.preventDefault();
+            const updateId = document.getElementById('updateId').value;
+            const adminIndex = admins.findIndex(a => a.Id === updateId);
+
+            if (adminIndex !== -1) {
+                const formData = new FormData(event.target);
+                admins[adminIndex] = {
+                    Name: formData.get('name') || admins[adminIndex].Name,
+                    Contact: formData.get('contact') || admins[adminIndex].Contact,
+                    Email: formData.get('email') || admins[adminIndex].Email,
+                    Role: formData.get('role') || admins[adminIndex].Role,
+                    Id: formData.get('id') || admins[adminIndex].Id
+                };
+
+                showSuccess('Admin data updated successfully!');
+                document.getElementById('updateDataForm').style.display = 'none';
+                event.target.reset();
+                document.getElementById('updateId').value = '';
+            }
+        }
+
+        function handleDeleteAdmin(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const deleteId = formData.get('deleteId');
+            
+            const adminIndex = admins.findIndex(a => a.Id === deleteId);
+
+            if (adminIndex !== -1) {
+                const admin = admins[adminIndex];
+                const confirmMsg = `Are you sure you want to delete this admin?\n\nName: ${admin.Name}\nID: ${admin.Id}`;
+                
+                if (confirm(confirmMsg)) {
+                    admins.splice(adminIndex, 1);
+                    showSuccess('Admin deleted successfully!');
+                    event.target.reset();
+                    closeForm('deleteAdminForm');
+                }
+            } else {
+                alert('Admin not found!');
+            }
+        }
+    </script>
+</body>
+</html>
