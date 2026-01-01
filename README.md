@@ -1,6 +1,6 @@
-######this is a university management system project 
-###created by Me and with the help of spec-diven-development-claude
-###based on HTML CSS JAVASCRIPT data stored in JS arrays not in data base
+###### this is a university management system project 
+### created by Me and with the help of spec-diven-development-claude
+### based on HTML CSS JAVASCRIPT data stored in JS arrays not in data base
 # Fusion Five - University Management System
 
 A comprehensive web-based university Management System built with HTML, CSS, and JavaScript. This project provides separate portals for administrators, teachers, students, and library management.
